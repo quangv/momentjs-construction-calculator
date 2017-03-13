@@ -49,6 +49,13 @@
           var mProjectEndDate = moment(new Date($projectEndDate.val()));
           if(mProjectEndDate.isValid()) {
             $projectEndDate.val(mProjectEndDate.format('YYYY-MM-DD'));
+
+            // Alert user their end date has changed
+            $('#projectEndDate').closest('label').animate({
+              fontSize: '1.5em'
+            }).animate({
+              fontSize: '1em'
+            })
           }
         });
       });
