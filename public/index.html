@@ -2,6 +2,11 @@
 <html>
   <head>
     <title>Moment.js Construction Calculator</title>
+    <style type="text/css">
+    .error {
+      color: red;
+    }
+    </style>
   </head>
   <body>
     <h1>Construction Estimator</h1>
@@ -12,6 +17,7 @@
       </div>
       <div>
         <label>Project End Date: <input type="text" id="projectEndDate" placeholder="YYYY-MM-DD" ></label>
+        <span id="projectEndDateError" class="error"></span>
       </div>
       <div>
         <label>Estimated Human Hours: <input type="text" value="1000" ></label>
@@ -24,6 +30,18 @@
         // Default Project-End-Date 1 month from now.
         var defaultEndDate = moment().add(1, 'months').format('YYYY-MM-DD');
         $('#projectEndDate').val(defaultEndDate);
+
+        // Check for invalid project end date.
+        $('#projectEndDate').on('input', function(){
+          var projectEndDate = $('#projectEndDate').val();  // get the text value.
+          projectEndDate = new Date(projectEndDate);  // convert to date object.
+
+          if(!moment(projectEndDate).isValid()) {  // Invalid date.
+            $('#projectEndDateError').text("Invalid date");
+          } else {  // Valid date.
+            $('#projectEndDateError').text("");
+          }
+        })
       });
     </script>
   </body>
