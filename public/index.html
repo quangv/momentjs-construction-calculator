@@ -11,13 +11,20 @@
         <label>Project Name: <input type="text" value="Pizza Palace" id="projectName" ></label>
       </div>
       <div>
-        <label>Project End Date: <input type="text" ></label>
+        <label>Project End Date: <input type="text" id="projectEndDate" placeholder="YYYY-MM-DD" ></label>
       </div>
       <div>
-        <label>Estimated Human Hours: <input type="text" ></label>
+        <label>Estimated Human Hours: <input type="text" value="1000" ></label>
       </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
+    <script>
+      $(document).ready(function(){
+        // Default Project-End-Date 1 month from now.
+        var defaultEndDate = moment().add(1, 'months').format('YYYY-MM-DD');
+        $('#projectEndDate').val(defaultEndDate);
+      });
+    </script>
   </body>
 </html>
