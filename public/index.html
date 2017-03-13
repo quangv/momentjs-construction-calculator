@@ -42,6 +42,15 @@
             $('#projectEndDateError').text("");
           }
         })
+
+        // Convert to ISO 8601 format
+        $('#projectEndDate').on('change', function(){
+          var $projectEndDate = $(this);
+          var mProjectEndDate = moment(new Date($projectEndDate.val()));
+          if(mProjectEndDate.isValid()) {
+            $projectEndDate.val(mProjectEndDate.format('YYYY-MM-DD'));
+          }
+        });
       });
     </script>
   </body>
