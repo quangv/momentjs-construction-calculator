@@ -46,7 +46,14 @@
         // Convert to ISO 8601 format
         $('#projectEndDate').on('change', function(){
           var $projectEndDate = $(this);
-          var mProjectEndDate = moment(new Date($projectEndDate.val()));
+
+          // Date parsed with hyphens (ISO-8601 format) is treated as UTC.
+          // Convert hyphens to slashes to treat it as local.
+          // http://blog.dygraphs.com/2012/03/javascript-and-dates-what-mess.html
+          var projectEndDate = $projectEndDate.val().replace(/-/g,'/');
+
+          var mProjectEndDate = moment(Date.parse(projectEndDate));
+
           if(mProjectEndDate.isValid()) {
             $projectEndDate.val(mProjectEndDate.format('YYYY-MM-DD'));
 
