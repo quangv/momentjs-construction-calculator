@@ -6,6 +6,10 @@
     .error {
       color: red;
     }
+    #result {
+      color: green;
+      margin: 1em;
+    }
     </style>
   </head>
   <body>
@@ -22,17 +26,17 @@
           <span id="projectEndDateError" class="error"></span>
         </div>
         <div>
-          <label>Estimated Human Hours: <input type="text" value="1000" ></label>
+          <label>Estimated Human Hours: <input type="number" value="1000" id="projectTotalHours" ></label>
         </div>
       </div>
 
       <div>
         <h2>Worker Details</h2>
         <div>
-          <label>Hours work in a week: <input type="text" value="20" id="workerWeekHours" ></label>
+          <label>Hours work in a week: <input type="number" value="20" id="hoursPerWeek" ></label>
         </div>
         <div>
-          <label>How many humans? <input type="text" value="" id="workers" ></label>
+          <label>How many humans? <input type="number" value="" id="workers" ></label>
         </div>
       </div>
 
@@ -40,6 +44,9 @@
         <button type="submit">Calculate</button>
       </div>
     </form>
+
+    <div id="result">
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
@@ -84,6 +91,37 @@
             }).animate({
               fontSize: '1em'
             })
+          }
+        });
+
+        // Handle Form Calculation.
+        $('form').on('submit', function(event){
+          event.preventDefault();
+          var $result = $('#result');
+          var humans = $('#workers').val();
+          if(!humans) {
+            $result.html('<span class="error">Please add some humans.</span>');
+          } else {
+            var result = {};
+
+            // Grab form values
+            var projectEndDate = $('#projectEndDate').val();
+            var totalHours = $('#projectTotalHours').val();
+
+            var hoursPerWeek = $('#hoursPerWeek').val();
+            var workers = $('#workers').val();
+
+            // Get Actual End-Date
+            var totalHours = workers * hoursPerWeek;
+
+            result['Total hours a week'] = totalHours;
+
+            // Display Results
+            var resultHtml = "";
+            for(var k in result) {
+              resultHtml += "<div><b>" + k + ":</b> " + result[k] + "</div>"
+            }
+            $result.html(resultHtml);
           }
         });
       });
