@@ -51,6 +51,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
     <script>
+      function getProjectEndMoment() {
+        var projectEndDate = $('#projectEndDate').val();
+
+        // Date parsed with hyphens (ISO-8601 format) is treated as UTC.
+        // Convert hyphens to slashes to treat it as local.
+        // http://blog.dygraphs.com/2012/03/javascript-and-dates-what-mess.html
+        projectEndDate = projectEndDate.replace(/-/g,'/');
+
+        return moment(Date.parse(projectEndDate));
+      }
       $(document).ready(function(){
         // Default Project-End-Date 1 month from now.
         var defaultEndDate = moment().add(1, 'months').format('YYYY-MM-DD');
@@ -73,12 +83,7 @@
           var $projectEndDate = $(this);
           var originalDate = $projectEndDate.val();
 
-          // Date parsed with hyphens (ISO-8601 format) is treated as UTC.
-          // Convert hyphens to slashes to treat it as local.
-          // http://blog.dygraphs.com/2012/03/javascript-and-dates-what-mess.html
-          var projectEndDate = originalDate.replace(/-/g,'/');
-
-          var mProjectEndDate = moment(Date.parse(projectEndDate));
+          var mProjectEndDate = getProjectEndMoment();
           var newDate = mProjectEndDate.format("YYYY-MM-DD")
 
           // Change date to ISO 8601 format and alert the user.
@@ -98,18 +103,28 @@
         $('form').on('submit', function(event){
           event.preventDefault();
           var $result = $('#result');
-          var humans = $('#workers').val();
-          if(!humans) {
+
+          var workers = $('#workers').val();
+          var projectEndDate = $('#projectEndDate').val();
+
+          if(!workers) {
             $result.html('<span class="error">Please add some humans.</span>');
+
+          // Check for valid Project End Date.
+          } else if(!moment(Date.parse(projectEndDate)).isValid()) {
+            $result.html('<span class="error">Needs a valid Project End Date.</span>');
+
+          // Checks if project end date is after today.
+          } else if(getProjectEndMoment().isBefore(Date.now())) {
+            $result.html('<span class="error">Project end date needs to be after today.</span>');
+
           } else {
             var result = {};
 
             // Grab form values
-            var projectEndDate = $('#projectEndDate').val();
             var totalHours = $('#projectTotalHours').val();
 
             var hoursPerWeek = $('#hoursPerWeek').val();
-            var workers = $('#workers').val();
 
             // Get Actual End-Date
             var totalHours = workers * hoursPerWeek;
