@@ -33,7 +33,7 @@
       <div>
         <h2>Worker Details</h2>
         <div>
-          <label>Hours work in a week: <input type="number" value="20" id="hoursPerWeek" ></label>
+          <label>Work hours per day: <input type="number" value="8" id="hoursPerDay" ></label>
         </div>
         <div>
           <label>How many humans? <input type="number" value="" id="workers" ></label>
@@ -124,10 +124,10 @@
             // Grab form values
             var totalHours = $('#projectTotalHours').val();
 
-            var hoursPerWeek = $('#hoursPerWeek').val();
+            var hoursPerDay = $('#hoursPerDay').val();
 
             // Get Actual End-Date
-            var totalHours = workers * hoursPerWeek;
+            var totalHours = workers * hoursPerDay * 5;
 
             result['Total hours a week'] = totalHours;
 
