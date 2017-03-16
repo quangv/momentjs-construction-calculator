@@ -26,17 +26,17 @@
           <span id="projectEndDateError" class="error"></span>
         </div>
         <div>
-          <label>Estimated Human Hours: <input type="number" value="1000" id="projectTotalHours" ></label>
+          <label>Estimated Human Hours: <input type="number" value="1000" min="0" id="projectTotalHours" ></label>
         </div>
       </div>
 
       <div>
         <h2>Worker Details</h2>
         <div>
-          <label>Work hours per day: <input type="number" value="8" id="hoursPerDay" ></label>
+          <label>Work hours per day: <input type="number" value="8" min="1" id="hoursPerDay" ></label>
         </div>
         <div>
-          <label>How many humans? <input type="number" value="" id="workers" ></label>
+          <label>How many humans? <input type="number" value="" min="1" id="workers" ></label>
         </div>
       </div>
 
@@ -61,6 +61,13 @@
 
         return moment(Date.parse(projectEndDate));
       }
+
+      // Is date Mon-Fri?
+      function isWeekDay(date) {
+        var day = moment(date).day();
+        return day > 0 && day < 6;
+      }
+
       $(document).ready(function(){
         // Default Project-End-Date 1 month from now.
         var defaultEndDate = moment().add(1, 'months').format('YYYY-MM-DD');
@@ -132,7 +139,28 @@
             result['Total hours a week'] = totalHoursPerDay * 5;
 
             // Actual Days needed.
-            result['Actual Days Needed'] = Math.ceil(totalHours / totalHoursPerDay);
+            var totalDays = Math.ceil(totalHours / totalHoursPerDay);
+            result['Actual Days Needed'] = totalDays;
+
+            // Actual End Date.
+            var actualEndMoment;
+
+            if(totalDays <= 0) {
+              var today = moment();
+
+              // if today is on a weekend, grab next Monday.
+              if(today.day() === 0){  // Sunday
+                actualEndMoment = today.add(1, 'days');
+              } else if(today.day() === 6){  // Saturday
+                actualEndMoment = today.add(2, 'days');
+              } else {
+                actualEndMoment = today;
+              }
+            }
+
+            if(actualEndMoment) {
+              result['Actual End Date'] = actualEndMoment.format('llll');
+            }
 
             // Display Results
             var resultHtml = "";
