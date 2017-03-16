@@ -126,10 +126,13 @@
 
             var hoursPerDay = $('#hoursPerDay').val();
 
-            // Get Actual End-Date
-            var totalHours = workers * hoursPerDay * 5;
+            // Total hours a week.
+            var totalHoursPerDay = workers * hoursPerDay;
+            // work week is 5 days.
+            result['Total hours a week'] = totalHoursPerDay * 5;
 
-            result['Total hours a week'] = totalHours;
+            // Actual Days needed.
+            result['Actual Days Needed'] = Math.ceil(totalHours / totalHoursPerDay);
 
             // Display Results
             var resultHtml = "";
