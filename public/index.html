@@ -145,9 +145,9 @@
             // Actual End Date.
             var actualEndMoment;
 
+            // If no days are needed.
+            var today = moment();
             if(totalDays <= 0) {
-              var today = moment();
-
               // if today is on a weekend, grab next Monday.
               if(today.day() === 0){  // Sunday
                 actualEndMoment = today.add(1, 'days');
@@ -156,10 +156,20 @@
               } else {
                 actualEndMoment = today;
               }
+
+            // Total time needed is a week or less.
+            // and there's enough days in the week to do the work.
+            } else if(totalDays <= 5 && today.day() + totalDays <= 6 ) {
+              if(today.day() === 0) {  // Sunday
+                actualEndMoment = today.clone().add(totalDays, 'days');
+              } else {
+                // Count today, if it's a workday, assume can work all hours today.
+                actualEndMoment = today.clone().add((totalDays - 1), 'days');
+              }
             }
 
             if(actualEndMoment) {
-              result['Actual End Date'] = actualEndMoment.format('llll');
+              result['Actual End Date'] = actualEndMoment.format('dddd, LL');
             }
 
             // Display Results
