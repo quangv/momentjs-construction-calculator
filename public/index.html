@@ -144,9 +144,9 @@
 
             // Actual End Date.
             var actualEndMoment;
+            var today = moment();
 
             // If no days are needed.
-            var today = moment();
             if(totalDays <= 0) {
               // if today is on a weekend, grab next Monday.
               if(today.day() === 0){  // Sunday
@@ -165,6 +165,31 @@
               } else {
                 // Count today, if it's a workday, assume can work all hours today.
                 actualEndMoment = today.clone().add((totalDays - 1), 'days');
+              }
+
+            // Calculate actual end date, when more than a week.
+            } else {
+              var totalDaysLeft = totalDays;
+
+              var workDaysInFirstWeek = 0;
+              if(today.day() < 6) {
+                workDaysInFirstWeek = Math.min((today.day() - 6), 5);
+              }
+              console.log('workDaysInFirstWeek', workDaysInFirstWeek);
+              totalDaysLeft = totalDays - workDaysInFirstWeek;
+
+              // A workweek is 5 days.
+              var weeksLeft = Math.floor(totalDaysLeft / 5);
+              var daysLeftInLastWeek = totalDaysLeft % 5;
+
+              actualEndMoment = today.clone().add(weeksLeft, 'weeks');
+
+              if(daysLeftInLastWeek) {
+                // Add daysLeftInLastWeek plus Sunday.
+                actualEndMoment.day(6).add(daysLeftInLastWeek + 1, 'days');
+              } else {
+                // Last week, project will be completed on a Friday.
+                actualEndMoment.day(5);
               }
             }
 
