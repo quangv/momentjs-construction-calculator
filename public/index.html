@@ -107,7 +107,7 @@
         var calendar = "<tr>";
         var dayClass;
 
-        while(!startCalendar.isSame(endCalendar, 'day')) {
+        while(!startCalendar.isAfter(endCalendar, 'day')) {
 
           // If day isn't in ending date month.
           dayClass = "";
