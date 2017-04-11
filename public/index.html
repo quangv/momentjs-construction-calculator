@@ -10,9 +10,15 @@
       color: green;
       margin: 1em;
     }
+    #calendar {
+      float: right;
+    }
     </style>
   </head>
   <body>
+
+    <div id="calendar">
+    </div>
 
     <form>
       <h1>Construction Estimator</h1>
@@ -36,7 +42,7 @@
           <label>Work hours per day: <input type="number" value="8" min="1" id="hoursPerDay" ></label>
         </div>
         <div>
-          <label>How many humans? <input type="number" value="" min="1" id="workers" ></label>
+          <label>How many humans? <input type="number" value="1" min="1" id="workers" ></label>
         </div>
       </div>
 
@@ -47,6 +53,7 @@
 
     <div id="result">
     </div>
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
@@ -66,6 +73,17 @@
       function isWeekDay(date) {
         var day = moment(date).day();
         return day > 0 && day < 6;
+      }
+
+      function makeCalendar(date) {
+        var result = "";
+        var endMoment = moment(date);  // make sure the date is a moment.
+
+        // Get Month
+        var month = endMoment.format('MMMM');
+
+        result += "<h1>" + month + "</h1>"
+        return result;
       }
 
       $(document).ready(function(){
@@ -125,6 +143,7 @@
           } else if(getProjectEndMoment().isBefore(Date.now())) {
             $result.html('<span class="error">Project end date needs to be after today.</span>');
 
+          // Looks Good, calculate result
           } else {
             var result = {};
 
@@ -203,6 +222,8 @@
               resultHtml += "<div><b>" + k + ":</b> " + result[k] + "</div>"
             }
             $result.html(resultHtml);
+
+            $('#calendar').html(makeCalendar(actualEndMoment));
           }
         });
       });
