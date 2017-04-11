@@ -13,6 +13,13 @@
     #calendar {
       float: right;
     }
+    #calendar .day--off {
+      color: lightgray;
+    }
+    #calendar .day--exact {
+      color: red;
+      font-weight: bold;
+    }
     </style>
   </head>
   <body>
@@ -98,11 +105,22 @@
         var endCalendar = dateMoment.clone().endOf('month').day(6);
 
         var calendar = "<tr>";
+        var dayClass;
 
-        while(!startCalendar.isSameOrAfter(endCalendar)) {
-          console.log('start', startCalendar.format());
-          console.log('end', endCalendar.format());
-          calendar += "<td>" + startCalendar.format('D') + "</td>"
+        while(!startCalendar.isSame(endCalendar, 'day')) {
+
+          // If day isn't in ending date month.
+          dayClass = "";
+          if(startCalendar.month() != dateMoment.month()) {
+            dayClass = 'day--off';
+          }
+
+          // If day is exactly the estimated end date.
+          if(startCalendar.isSame(dateMoment, 'day')) {
+            dayClass = 'day--exact';
+          }
+
+          calendar += '<td class="' + dayClass + '">' + startCalendar.format('D') + "</td>"
 
           // If it's last day of week, start new row.
           if(startCalendar.day() === 6) {
