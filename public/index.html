@@ -77,11 +77,11 @@
 
       function makeCalendar(date) {
         var result = "";
-        var endMoment = moment(date);  // make sure the date is a moment.
+        var dateMoment = moment(date);  // make sure the date is a moment.
 
         // Get Month
-        var month = endMoment.format('MMMM');
-        result += "<h1>" + month + "</h1>"
+        var monthYear = dateMoment.format('MMMM, YYYY');
+        result += "<h1>" + monthYear + "</h1>"
 
         // Get Week Headers
         var m = moment().day(7)  // start on a sunday
@@ -93,8 +93,29 @@
         }
         weekHeaders += "</tr>";
 
+        // Get Calendar
+        var startCalendar = dateMoment.clone().startOf('month').day(0);
+        var endCalendar = dateMoment.clone().endOf('month').day(6);
 
-        result += "<table>" + weekHeaders + "</table>";
+        var calendar = "<tr>";
+
+        while(!startCalendar.isSameOrAfter(endCalendar)) {
+          console.log('start', startCalendar.format());
+          console.log('end', endCalendar.format());
+          calendar += "<td>" + startCalendar.format('D') + "</td>"
+
+          // If it's last day of week, start new row.
+          if(startCalendar.day() === 6) {
+            calendar += "</tr><tr>"
+          }
+
+          startCalendar.add(1, 'day');
+        }
+
+        calendar += "</tr>";
+
+
+        result += "<table>" + weekHeaders + calendar + "</table>";
 
         return result;
       }
@@ -207,7 +228,6 @@
               if(today.day() < 6) {
                 workDaysInFirstWeek = Math.min((today.day() - 6), 5);
               }
-              console.log('workDaysInFirstWeek', workDaysInFirstWeek);
               totalDaysLeft = totalDays - workDaysInFirstWeek;
 
               // A workweek is 5 days.
