@@ -81,8 +81,21 @@
 
         // Get Month
         var month = endMoment.format('MMMM');
-
         result += "<h1>" + month + "</h1>"
+
+        // Get Week Headers
+        var m = moment().day(7)  // start on a sunday
+
+        var weekHeaders = "<tr>";
+        for(var i = 0; i<7; i++) {
+          weekHeaders += "<th>" + m.format('ddd') + "</th>";
+          m.add(1, 'day');
+        }
+        weekHeaders += "</tr>";
+
+
+        result += "<table>" + weekHeaders + "</table>";
+
         return result;
       }
 
