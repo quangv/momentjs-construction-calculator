@@ -211,7 +211,7 @@
 
             // Actual Days needed.
             var totalDays = Math.ceil(totalHours / totalHoursPerDay);
-            result['Work Days Needed'] = totalDays;
+            result['Actual Work Days Needed'] = totalDays;
 
             // Actual End Date.
             var actualEndMoment;
@@ -265,6 +265,7 @@
 
             if(actualEndMoment) {
               result['Actual End Date'] = actualEndMoment.format('dddd, LL');
+              result['Actual Time Needed'] = actualEndMoment.fromNow();
             }
 
             // Display Results
