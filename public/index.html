@@ -7,7 +7,7 @@
       color: red;
     }
     #result {
-      color: green;
+      color: blue;
       margin: 1em;
     }
     #calendar {
@@ -19,6 +19,16 @@
     #calendar .day--exact {
       color: red;
       font-weight: bold;
+    }
+    .final-result {
+      font-weight: bold;
+      font-size: 2rem;
+    }
+    .final-result--good {
+      color: green;
+    }
+    .final-result--bad {
+      color: red;
     }
     </style>
   </head>
@@ -273,6 +283,16 @@
             for(var k in result) {
               resultHtml += "<div><b>" + k + ":</b> " + result[k] + "</div>"
             }
+
+            // Final Results
+            var projectEndMoment = getProjectEndMoment();
+
+            if(projectEndMoment.isSameOrAfter(actualEndMoment, 'day')) {
+              resultHtml += '<div class="final-result final-result--good">Project is On Time!</div>';
+            } else {
+              resultHtml += '<div class="final-result final-result--bad">Project is Late!</div>';
+            }
+
             $result.html(resultHtml);
 
             $('#calendar').html(makeCalendar(actualEndMoment));
