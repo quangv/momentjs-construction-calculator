@@ -22,5 +22,6 @@
   },
   "homepage": "https://github.com/quangv/momentjs-construction-calculator#readme",
   "devDependencies": {
+    "http-server": "^0.10.0"
   }
 }
